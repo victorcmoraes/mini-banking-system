@@ -1,0 +1,85 @@
+<main class="shell">
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Capgemini / Bradesco prep</p>
+      <h1>Mini Banking</h1>
+    </div>
+
+    <aside class="status" *ngIf="account">
+      <span>{{ account.ownerName }}</span>
+      <strong>{{ account.balance | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</strong>
+    </aside>
+  </header>
+
+  <section class="layout">
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Extrato</h2>
+          <p>Conta {{ sourceAccountId }}</p>
+        </div>
+        <button class="reload" type="button" title="Atualizar extrato" (click)="reload()" [disabled]="loading">Atualizar</button>
+      </div>
+
+      <p class="loading" *ngIf="loading">Carregando dados da conta...</p>
+
+      <table class="statement" *ngIf="!loading && transactions.length > 0">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Origem</th>
+            <th>Destino</th>
+            <th>Valor</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaction of transactions">
+            <td>{{ transaction.createdAt | date:'dd/MM HH:mm' }}</td>
+            <td>{{ transaction.sourceAccountId }}</td>
+            <td>{{ transaction.targetAccountId }}</td>
+            <td
+              class="amount"
+              [class.out]="transaction.sourceAccountId === sourceAccountId"
+              [class.in]="transaction.targetAccountId === sourceAccountId"
+            >
+              {{ signedAmount(transaction) | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+            </td>
+            <td>{{ transaction.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="empty" *ngIf="!loading && transactions.length === 0">Nenhuma movimentacao ainda.</p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Transferencia</h2>
+          <p>Reactive Forms + Idempotency-Key</p>
+        </div>
+      </div>
+
+      <form class="transfer-form" [formGroup]="transferForm" (ngSubmit)="submit()">
+        <label>
+          Conta de destino
+          <input type="number" min="1" formControlName="targetAccountId">
+          <span class="hint">Use 1002 ou 1003 para testar.</span>
+        </label>
+
+        <label>
+          Valor
+          <input type="number" min="0.01" step="0.01" formControlName="amount">
+        </label>
+
+        <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+        <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+
+        <button class="primary" type="submit" [disabled]="transferForm.invalid || submitting">
+          {{ submitting ? 'Enviando...' : 'Transferir' }}
+        </button>
+      </form>
+    </section>
+  </section>
+</main>

@@ -1,0 +1,10 @@
+**/target/
+**/node_modules/
+**/dist/
+**/.angular/
+*.iml
+.idea/
+.vscode/
+docs/perguntas-simulado.md
+docs/roteiro-fds.md
+docs/pitch-recrutador.md
