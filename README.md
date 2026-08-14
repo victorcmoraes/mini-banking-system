@@ -4,12 +4,11 @@ Full-stack banking demo focused on transaction safety, idempotent transfers, and
 
 The project uses Java 17, Spring Boot, JPA, H2, Angular, and a hexagonal architecture. It is a synthetic portfolio project: the data resets when the demo API restarts and no real financial data is involved.
 
-## Live demo
+## Deployment
 
-- Frontend: `https://mini-banking-system-victorcmoraes.vercel.app`
-- API health: `https://mini-banking-api-victorcmoraes.onrender.com/actuator/health`
+The repository includes a Vercel configuration for the Angular app and a Render blueprint for the Spring Boot API. After connecting the repository in each provider, set the frontend project root to `frontend` and configure `CORS_ALLOWED_ORIGINS` on Render with the exact Vercel origin.
 
-The free API may take up to a minute to wake up after inactivity. Reload the frontend once the health endpoint returns `UP`.
+Render's free web service may take up to a minute to wake after inactivity; the frontend should surface that cold-start state to demo users.
 
 ## Architecture
 
@@ -75,9 +74,7 @@ cd frontend && npm run build
 
 GitHub Actions runs backend tests, frontend tests/build, and the backend Docker build on every push and pull request.
 
-## Deployment
-
-The Angular app is deployed through Vercel from the `frontend` directory. The Spring Boot API is deployed as a Docker Web Service on Render. Configure `CORS_ALLOWED_ORIGINS` on the API with the exact Vercel origin; the H2 database is intentionally ephemeral for this demo.
+The H2 database is intentionally ephemeral for this demo.
 
 ## License
 
